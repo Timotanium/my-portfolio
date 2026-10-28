@@ -2,6 +2,7 @@
 import React from 'react';
 import { personalInfo, projects, skills, experience } from './data/portfolioData';
 import Lanyard from './components/Lanyard';
+import Folder from './components/Folder';
 
 export default function App() {
   return (
@@ -48,25 +49,26 @@ export default function App() {
 
           {/* 3D Lanyard Interactive Component */}
           <div style={{ width: '100%', height: '600px' }}>
-            <Lanyard frontImage="../badge.png"
-            imageFit="cover"
-            cardColor="#ffffff"
-            orientation="portrait"
-            finish="glossy"
-            cornerRadius={0.3}
-            size={0.6}
-            anchor="center"
-            strapLength={0.5}
-            strapColor="#111111"
-            strapWidth={0.65}
-            metal="silver"
-            gravity={1}
-            damping={0.5}
-            elasticity={0.5}
-            breeze={0.5}
-            interactive
-            intro
-          />
+            <Lanyard 
+              frontImage="../badge.png"
+              imageFit="cover"
+              cardColor="#ffffff"
+              orientation="portrait"
+              finish="glossy"
+              cornerRadius={0.3}
+              size={0.6}
+              anchor="center"
+              strapLength={0.5}
+              strapColor="#111111"
+              strapWidth={0.65}
+              metal="silver"
+              gravity={1}
+              damping={0.5}
+              elasticity={0.5}
+              breeze={0.5}
+              interactive
+              intro
+            />
           </div>
         </section>
 
@@ -107,29 +109,59 @@ export default function App() {
           <h2 className="text-2xl font-bold mb-6">Featured Projects</h2>
           <div className="space-y-6">
             {projects.map((p) => (
-              <div key={p.id} className="p-6 rounded-xl bg-gray-900/60 border border-gray-800 hover:border-gray-700 transition-colors">
-                <div className="flex justify-between items-start mb-2 flex-wrap gap-2">
-                  <div>
-                    <span className="inline-block px-2.5 py-0.5 text-[10px] font-semibold text-teal-300 bg-teal-950/80 border border-teal-500/30 rounded-full mb-2">
-                      {p.category}
-                    </span>
-                    <h3 className="text-lg font-bold text-gray-100">{p.title}</h3>
+              <div key={p.id} className="p-6 rounded-xl bg-gray-900/60 border border-gray-800 hover:border-gray-700 transition-colors flex flex-col lg:flex-row gap-8 items-center">
+                
+                {/* Left Side: Project Text Details */}
+                <div className="flex-1 w-full">
+                  <div className="flex justify-between items-start mb-2 flex-wrap gap-2">
+                    <div>
+                      <span className="inline-block px-2.5 py-0.5 text-[10px] font-semibold text-teal-300 bg-teal-950/80 border border-teal-500/30 rounded-full mb-2">
+                        {p.category}
+                      </span>
+                      <h3 className="text-xl font-bold text-gray-100">{p.title}</h3>
+                    </div>
+                    <span className="font-mono text-xs text-gray-400">{p.date}</span>
                   </div>
-                  <span className="font-mono text-xs text-gray-400">{p.date}</span>
+                  <p className="text-gray-400 text-sm mb-4 leading-relaxed">{p.description}</p>
+                  <ul className="list-disc list-inside text-gray-400 text-sm mb-4 space-y-1">
+                    {p.highlights.map((h, i) => (
+                      <li key={i}>{h}</li>
+                    ))}
+                  </ul>
+                  <div className="flex gap-2 flex-wrap">
+                    {p.techStack.map((tech) => (
+                      <span key={tech} className="px-2.5 py-1 text-xs font-mono rounded-md bg-gray-800 text-teal-300 border border-gray-700">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-                <p className="text-gray-400 text-sm mb-4 leading-relaxed">{p.description}</p>
-                <ul className="list-disc list-inside text-gray-400 text-sm mb-4 space-y-1">
-                  {p.highlights.map((h, i) => (
-                    <li key={i}>{h}</li>
-                  ))}
-                </ul>
-                <div className="flex gap-2 flex-wrap">
-                  {p.techStack.map((tech) => (
-                    <span key={tech} className="px-2.5 py-1 text-xs font-mono rounded-md bg-gray-800 text-teal-300 border border-gray-700">
-                      {tech}
-                    </span>
-                  ))}
+
+                {/* Right Side: Interactive Screenshots Folder mapped from p.images */}
+                <div className="w-full lg:w-[340px] h-[300px] flex-shrink-0 relative flex justify-center items-center rounded-lg bg-gray-950/50 border border-gray-800/50">
+                  <Folder 
+                    label="Screenshots" 
+                    items={p.images}
+                    mode="flap"
+                    variant="solid"
+                    layout="spread"
+                    color="#0d9488"
+                    paperColor="#ffffff"
+                    tabPosition="right"
+                    openOn="click"
+                    size={0.9}
+                    frost={0.25}
+                    tilt={0.5}
+                    speed={1}
+                    bounce={0.4}
+                    peek
+                    intro
+                    draggable
+                    zoomOnClick
+                    theme="dark"
+                  />
                 </div>
+
               </div>
             ))}
           </div>

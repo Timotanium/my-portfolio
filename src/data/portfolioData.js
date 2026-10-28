@@ -6,7 +6,7 @@ export const personalInfo = {
   location: "Santa Rosa, Laguna, Philippines",
   email: "reyestimothyjosefa@gmail.com",
   linkedin: "https://www.linkedin.com/in/timothy-josef-reyes-661735317/",
-  github: "https://github.com/TimothyJosef-Reyes", // Note: Fixed space in URL format
+  github: "https://github.com/TimothyJosef-Reyes",
   bio: "BS Computer Science student at UPLB and DOST Scholar. Experienced in computer vision, machine learning algorithms, and full-stack web applications.",
   education: {
     institution: "University of the Philippines Los Baños",
@@ -30,7 +30,12 @@ export const projects = [
       "Calculates live stomata density, average size, and surface area metrics dynamically."
     ],
     githubUrl: "https://github.com/TimothyJosef-Reyes",
-    featured: true
+    featured: true,
+    images: [
+      { image: '../badge.png', title: 'MATA - Dashboard' },
+      { image: '../badge.png', title: 'MATA - ROI Tool' },
+      { image: '../badge.png', title: 'MATA - Metrics' }
+    ]
   },
   {
     id: "mais",
@@ -46,7 +51,12 @@ export const projects = [
       "Generates actionable mitigation strategies like storage optimization and pest warnings."
     ],
     githubUrl: "https://github.com/TimothyJosef-Reyes",
-    featured: true
+    featured: true,
+    images: [
+      { image: '../badge.png', title: 'MAIS - Interface' },
+      { image: '../badge.png', title: 'MAIS - Telemetry' },
+      { image: '../badge.png', title: 'MAIS - Analysis' }
+    ]
   },
   {
     id: "farm-to-table",
@@ -62,7 +72,12 @@ export const projects = [
       "NoSQL database schema design in MongoDB for products and transactions."
     ],
     githubUrl: "https://github.com/TimothyJosef-Reyes",
-    featured: true
+    featured: true,
+    images: [
+      { image: '../badge.png', title: 'Marketplace - Home' },
+      { image: '../badge.png', title: 'Marketplace - Cart' },
+      { image: '../badge.png', title: 'Marketplace - Checkout' }
+    ]
   }
 ];
 
