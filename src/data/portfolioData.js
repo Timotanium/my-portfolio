@@ -32,7 +32,7 @@ export const projects = [
     githubUrl: "https://github.com/TimothyJosef-Reyes",
     featured: true,
     images: [
-      { image: '../badge.png', title: 'MATA - Dashboard' },
+      { image: 'https://res.cloudinary.com/jlichquy/image/upload/v1793431021/BAT2_1a_Ctl_10X_1.jpg', title: 'MATA - Dashboard' },
       { image: '../badge.png', title: 'MATA - ROI Tool' },
       { image: '../badge.png', title: 'MATA - Metrics' }
     ]
