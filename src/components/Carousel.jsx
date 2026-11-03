@@ -105,27 +105,19 @@ const DEFAULT_ITEMS = [
 
 const THEMES = {
 dark: {
-    // Matches your bg-gray-900/60 and border-gray-800/80
-    '--carousel-frame': 'rgba(17, 24, 39, 0.66)', 
-    '--carousel-frame-edge': 'rgba(31, 41, 55, 0.8)', 
-    '--carousel-frame-highlight': 'rgba(45, 212, 191, 0.08)', // Subtle teal highlight
+    '--carousel-frame': 'rgba(24, 24, 27, 0.66)', // match zinc-900
+    '--carousel-frame-edge': 'rgba(39, 39, 42, 0.8)', // match zinc-800
+    '--carousel-frame-highlight': 'rgba(99, 102, 241, 0.08)', // Indigo highlight
     '--carousel-frame-shadow': '0 22px 44px -20px rgba(0, 0, 0, 0.8), 0 6px 16px -8px rgba(0, 0, 0, 0.5)',
-    
-    // Slopes from gray-800 down to your core #090d16 background
-    '--carousel-tile': 'linear-gradient(180deg, #1f2937 0%, #090d16 100%)', 
-    '--carousel-tile-edge': 'rgba(255, 255, 255, 0.08)',
-    '--carousel-tile-highlight': 'rgba(45, 212, 191, 0.12)', 
+    '--carousel-tile': 'linear-gradient(180deg, #27272a 0%, #09090b 100%)', // zinc-800 to zinc-950
+    '--carousel-tile-edge': 'rgba(255, 255, 255, 0.06)',
+    '--carousel-tile-highlight': 'rgba(99, 102, 241, 0.12)', 
     '--carousel-tile-shadow': '0 4px 10px -4px rgba(0, 0, 0, 0.7)',
-    
-    // Matches your text-gray-100 and text-gray-400 text classes
-    '--carousel-ink': '#f3f4f6', 
-    '--carousel-muted': '#9ca3af', 
-    
-    // Controls the indicator dots and badges
-    '--carousel-faint': 'rgba(255, 255, 255, 0.15)',
-    '--carousel-soft': '#2dd4bf', // Teal-400 for the active indicator dot
-    '--carousel-badge': 'rgba(20, 184, 166, 0.2)', // Teal-500 base for badges
-    
+    '--carousel-ink': '#6366f1', 
+    '--carousel-muted': '#a1a1aa', // zinc-400
+    '--carousel-faint': 'rgba(255, 255, 255, 0.1)',
+    '--carousel-soft': '#6366f1', // Indigo-500 for active dot
+    '--carousel-badge': 'rgba(99, 102, 241, 0.2)',
     '--carousel-hover': 'brightness(1.15)',
     '--carousel-press': 'brightness(0.85)'
   },

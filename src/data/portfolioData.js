@@ -6,7 +6,7 @@ export const personalInfo = {
   location: "Santa Rosa, Laguna, Philippines",
   email: "reyestimothyjosefa@gmail.com",
   linkedin: "https://www.linkedin.com/in/timothy-josef-reyes-661735317/",
-  github: "https://github.com/TimothyJosef-Reyes",
+  github: "https://github.com/Timotanium",
   bio: "BS Computer Science student at UPLB and DOST Scholar. Experienced in computer vision, machine learning algorithms, and full-stack web applications.",
   education: {
     institution: "University of the Philippines Los Baños",
