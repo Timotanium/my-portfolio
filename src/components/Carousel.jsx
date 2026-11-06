@@ -262,6 +262,8 @@ export default function Carousel({
   draggable = true,
   round = false,
   initialIndex = 0,
+  activeIndex,
+  onItemClick,
   theme = 'dark',
   onChange,
   className = '',
@@ -288,6 +290,15 @@ export default function Carousel({
   const startRef = useRef(active);
   const reportedRef = useRef(active);
   const previousRef = useRef(active);
+
+  useEffect(() => {
+    const target = typeof activeIndex === 'number' ? activeIndex : initialIndex;
+    if (typeof target === 'number' && target >= 0 && target < count) {
+      if (target !== active) {
+        engineRef.current?.goTo(target);
+      }
+    }
+  }, [activeIndex, initialIndex, count, active]);
 
   const side = stacked || (round && frame) ? 0 : clamp(peek, 0, width * 0.2);
   const slot = Math.max(40, width - side * 2);
@@ -812,7 +823,7 @@ export default function Carousel({
                 ref={element => {
                   slideRefs.current[index] = element;
                 }}
-                className={index === active ? SLIDE : SLIDE_OTHER}
+                className={`${index === active ? SLIDE : SLIDE_OTHER}${onItemClick ? ' cursor-zoom-in' : ''}`}
                 style={{
                   left: inset,
                   width: cardWidth,
@@ -828,10 +839,22 @@ export default function Carousel({
                 aria-roledescription="slide"
                 aria-label={`${index + 1} of ${count}`}
                 onClick={() => {
-                  if (index !== active) engineRef.current?.goTo(index);
+                  if (onItemClick) {
+                    onItemClick(item, index);
+                  } else if (index !== active) {
+                    engineRef.current?.goTo(index);
+                  }
                 }}
               >
                 <Card item={item} round={round} compact={round && cardWidth < 240} />
+                {onItemClick && (
+                  <div className="absolute top-2.5 right-2.5 z-20 opacity-0 group-hover/slide:opacity-100 transition-opacity duration-200 bg-black/60 backdrop-blur-md text-white p-1.5 rounded-lg border border-white/20 pointer-events-none flex items-center gap-1.5 text-[11px] font-bold shadow-lg">
+                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+                    </svg>
+                    <span className="hidden sm:inline">Click to expand</span>
+                  </div>
+                )}
                 {mode === 'cube' && (
                   <span
                     ref={element => {

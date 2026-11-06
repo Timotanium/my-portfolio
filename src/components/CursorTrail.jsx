@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
-// Color palette tuned to the portfolio's neon cyber/indigo aesthetic
-const PIXEL_COLORS = [
+// Color palettes tuned for both dark and light modes
+const DARK_PIXEL_COLORS = [
   { r: 99, g: 102, b: 241 },   // Indigo 500
   { r: 129, g: 140, b: 248 }, // Indigo 400
   { r: 165, g: 180, b: 252 }, // Indigo 300
@@ -11,13 +11,27 @@ const PIXEL_COLORS = [
   { r: 248, g: 250, b: 252 }, // Crisp White Spark
 ];
 
+const LIGHT_PIXEL_COLORS = [
+  { r: 79, g: 70, b: 229 },   // Indigo 600
+  { r: 99, g: 102, b: 241 },  // Indigo 500
+  { r: 147, g: 51, b: 234 },  // Purple 600
+  { r: 2, g: 132, b: 199 },   // Sky 600
+  { r: 219, g: 39, b: 119 },  // Pink 600
+  { r: 30, g: 41, b: 59 },    // Slate 800
+];
+
 // Discrete square pixel sizes: smaller and subtler to keep reading unobstructed
 const PIXEL_SIZES = [2, 2.5, 3, 4, 5, 6];
 
-export default function CursorTrail() {
+export default function CursorTrail({ theme = "dark" }) {
   const canvasRef = useRef(null);
   const particlesRef = useRef([]);
   const lastMouseRef = useRef({ x: null, y: null });
+  const themeRef = useRef(theme);
+
+  useEffect(() => {
+    themeRef.current = theme;
+  }, [theme]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -39,7 +53,8 @@ export default function CursorTrail() {
     window.addEventListener("resize", resizeCanvas);
 
     const spawnPixel = (x, y, vx, vy) => {
-      const color = PIXEL_COLORS[Math.floor(Math.random() * PIXEL_COLORS.length)];
+      const palette = themeRef.current === 'dark' ? DARK_PIXEL_COLORS : LIGHT_PIXEL_COLORS;
+      const color = palette[Math.floor(Math.random() * palette.length)];
       const size = PIXEL_SIZES[Math.floor(Math.random() * PIXEL_SIZES.length)];
 
       // Random flutter/ejection angle with gentler spread
@@ -183,7 +198,7 @@ export default function CursorTrail() {
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none fixed inset-0 z-50 mix-blend-screen"
+      className={`pointer-events-none fixed inset-0 z-50 ${theme === 'dark' ? 'mix-blend-screen' : 'mix-blend-multiply'}`}
     />
   );
 }
