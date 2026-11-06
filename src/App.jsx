@@ -1,7 +1,7 @@
 // src/App.jsx
 import React, { useState, useEffect } from 'react';
 import { Sun, Moon } from 'lucide-react';
-import { personalInfo, projects, skills, experience } from './data/portfolioData';
+import { personalInfo, projects, skills, experience, hobbies } from './data/portfolioData';
 import Lanyard from './components/Lanyard';
 import Carousel from './components/Carousel';
 import DotGrid from './components/DotGrid';
@@ -20,9 +20,8 @@ export default function App() {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('theme');
       if (saved === 'light' || saved === 'dark') return saved;
-      return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
     }
-    return 'dark';
+    return 'light'; // Default to light theme
   });
 
   useEffect(() => {
@@ -216,11 +215,11 @@ export default function App() {
 
               <div className="space-y-3 sm:space-y-4 mb-8 sm:mb-10 w-full">
                 <h3 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-oswald text-zinc-900 dark:text-zinc-50 uppercase tracking-wide leading-[1.08]">
-                  SOFTWARE ENGINEER <br/>
-                  <span className="text-indigo-600 dark:text-indigo-400">& RESEARCH LEAD</span>
+                  CS STUDENT <br/>
+                  <span className="text-indigo-600 dark:text-indigo-400">& BUILDER</span>
                 </h3>
                 <p className="font-mono text-indigo-600 dark:text-indigo-400 font-bold text-xs sm:text-sm md:text-base tracking-[0.15em] sm:tracking-[0.2em] uppercase">
-                  {personalInfo.role} • COMPUTER VISION • UI/UX
+                  {personalInfo.role} • COMPUTER VISION • ML
                 </p>
               </div>
 
@@ -426,55 +425,29 @@ export default function App() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-              
-              {/* Active Card */}
-              <div className="relative p-5 sm:p-8 lg:p-10 rounded-xl md:rounded-none bg-white/60 dark:bg-transparent bg-lines border-2 sm:border-4 border-zinc-300 dark:border-zinc-800 shadow-[6px_6px_0px_rgba(0,0,0,0.06)] dark:shadow-[6px_6px_0px_rgba(0,0,0,0.5)] sm:shadow-[8px_8px_0px_rgba(0,0,0,0.06)] sm:dark:shadow-[8px_8px_0px_rgba(0,0,0,0.5)] hover:border-indigo-600 dark:hover:border-indigo-500 hover:shadow-[6px_6px_0px_rgba(99,102,241,0.2)] sm:hover:shadow-[8px_8px_0px_rgba(99,102,241,0.2)] dark:hover:shadow-[6px_6px_0px_rgba(99,102,241,0.5)] sm:dark:hover:shadow-[8px_8px_0px_rgba(99,102,241,0.5)] transition-all">
-                <div className="absolute -top-3.5 -right-2 sm:-top-4 sm:-right-4 px-2.5 py-1 sm:px-3 sm:py-1 bg-indigo-600 text-white dark:bg-indigo-500 dark:text-zinc-950 font-black uppercase text-[11px] sm:text-xs md:text-sm rotate-6 border-2 border-zinc-900 dark:border-zinc-950 shadow-[3px_3px_0px_#18181b] dark:shadow-[3px_3px_0px_#ffffff] sm:shadow-[4px_4px_0px_#18181b] sm:dark:shadow-[4px_4px_0px_#ffffff]">
-                  Co-op Mode
+              {hobbies.map((hobby) => (
+                <div
+                  key={hobby.id}
+                  className="relative p-5 sm:p-8 lg:p-10 rounded-xl md:rounded-none bg-white/60 dark:bg-transparent bg-lines border-2 sm:border-4 border-zinc-300 dark:border-zinc-800 shadow-[6px_6px_0px_rgba(0,0,0,0.06)] dark:shadow-[6px_6px_0px_rgba(0,0,0,0.5)] sm:shadow-[8px_8px_0px_rgba(0,0,0,0.06)] sm:dark:shadow-[8px_8px_0px_rgba(0,0,0,0.5)] hover:border-indigo-600 dark:hover:border-indigo-500 hover:shadow-[6px_6px_0px_rgba(99,102,241,0.2)] sm:hover:shadow-[8px_8px_0px_rgba(99,102,241,0.2)] dark:hover:shadow-[6px_6px_0px_rgba(99,102,241,0.5)] sm:dark:hover:shadow-[8px_8px_0px_rgba(99,102,241,0.5)] transition-all"
+                >
+                  {hobby.badge && (
+                    <div className="absolute -top-3.5 -right-2 sm:-top-4 sm:-right-4 px-2.5 py-1 sm:px-3 sm:py-1 bg-indigo-600 text-white dark:bg-indigo-500 dark:text-zinc-950 font-black uppercase text-[11px] sm:text-xs md:text-sm rotate-6 border-2 border-zinc-900 dark:border-zinc-950 shadow-[3px_3px_0px_#18181b] dark:shadow-[3px_3px_0px_#ffffff] sm:shadow-[4px_4px_0px_#18181b] sm:dark:shadow-[4px_4px_0px_#ffffff]">
+                      {hobby.badge}
+                    </div>
+                  )}
+                  <h3 className="text-xl sm:text-2xl lg:text-3xl font-oswald uppercase tracking-wide text-zinc-900 dark:text-zinc-50 mb-3 sm:mb-4">{hobby.title}</h3>
+                  <p className="text-zinc-600 dark:text-zinc-300 text-sm sm:text-base font-medium mb-6 sm:mb-8 leading-relaxed">
+                    {hobby.description}
+                  </p>
+                  <div className="flex flex-wrap gap-2 sm:gap-3">
+                    {hobby.tags.map((tag) => (
+                      <span key={tag} className="px-2.5 py-1 sm:px-3 sm:py-1.5 text-xs font-bold uppercase tracking-wider bg-white dark:bg-zinc-950 text-indigo-700 dark:text-indigo-300 border border-zinc-300 dark:border-zinc-800 sm:border-2 shadow-sm dark:shadow-none">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-                <h3 className="text-xl sm:text-2xl lg:text-3xl font-oswald uppercase tracking-wide text-zinc-900 dark:text-zinc-50 mb-3 sm:mb-4">Analog & Active</h3>
-                <p className="text-zinc-600 dark:text-zinc-300 text-sm sm:text-base font-medium mb-6 sm:mb-8 leading-relaxed">
-                  Always moving. Usually hitting the wall, the roads, or the tables with friends to balance out the screen time.
-                </p>
-                <div className="flex flex-wrap gap-2 sm:gap-3">
-                  {['Bouldering', 'Biking', 'Table Tennis', 'Lifting'].map((hobby) => (
-                    <span key={hobby} className="px-2.5 py-1 sm:px-3 sm:py-1.5 text-xs font-bold uppercase tracking-wider bg-white dark:bg-zinc-950 text-indigo-700 dark:text-indigo-300 border border-zinc-300 dark:border-zinc-800 sm:border-2 shadow-sm dark:shadow-none">
-                      {hobby}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Gaming Card */}
-              <div className="p-5 sm:p-8 lg:p-10 rounded-xl md:rounded-none bg-white/60 dark:bg-transparent bg-lines border-2 sm:border-4 border-zinc-300 dark:border-zinc-800 shadow-[6px_6px_0px_rgba(0,0,0,0.06)] dark:shadow-[6px_6px_0px_rgba(0,0,0,0.5)] sm:shadow-[8px_8px_0px_rgba(0,0,0,0.06)] sm:dark:shadow-[8px_8px_0px_rgba(0,0,0,0.5)] hover:border-indigo-600 dark:hover:border-indigo-500 hover:shadow-[6px_6px_0px_rgba(99,102,241,0.2)] sm:hover:shadow-[8px_8px_0px_rgba(99,102,241,0.2)] dark:hover:shadow-[6px_6px_0px_rgba(99,102,241,0.5)] sm:dark:hover:shadow-[8px_8px_0px_rgba(99,102,241,0.5)] transition-all">
-                <h3 className="text-xl sm:text-2xl lg:text-3xl font-oswald uppercase tracking-wide text-zinc-900 dark:text-zinc-50 mb-3 sm:mb-4">Digital Worlds</h3>
-                <p className="text-zinc-600 dark:text-zinc-300 text-sm sm:text-base font-medium mb-6 sm:mb-8 leading-relaxed">
-                  From sweating out tactical rounds to catching 'em all and building endless blocky landscapes.
-                </p>
-                <div className="flex flex-wrap gap-2 sm:gap-3">
-                  {['Rainbow Six Siege', 'Pokémon', 'Minecraft'].map((game) => (
-                    <span key={game} className="px-2.5 py-1 sm:px-3 sm:py-1.5 text-xs font-bold uppercase tracking-wider bg-white dark:bg-zinc-950 text-indigo-700 dark:text-indigo-300 border border-zinc-300 dark:border-zinc-800 sm:border-2 shadow-sm dark:shadow-none">
-                      {game}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Food/Downtime Card */}
-              <div className="p-5 sm:p-8 lg:p-10 rounded-xl md:rounded-none bg-white/60 dark:bg-transparent bg-lines border-2 sm:border-4 border-zinc-300 dark:border-zinc-800 shadow-[6px_6px_0px_rgba(0,0,0,0.06)] dark:shadow-[6px_6px_0px_rgba(0,0,0,0.5)] sm:shadow-[8px_8px_0px_rgba(0,0,0,0.06)] sm:dark:shadow-[8px_8px_0px_rgba(0,0,0,0.5)] hover:border-indigo-600 dark:hover:border-indigo-500 hover:shadow-[6px_6px_0px_rgba(99,102,241,0.2)] sm:hover:shadow-[8px_8px_0px_rgba(99,102,241,0.2)] dark:hover:shadow-[6px_6px_0px_rgba(99,102,241,0.5)] sm:dark:hover:shadow-[8px_8px_0px_rgba(99,102,241,0.5)] transition-all">
-                <h3 className="text-xl sm:text-2xl lg:text-3xl font-oswald uppercase tracking-wide text-zinc-900 dark:text-zinc-50 mb-3 sm:mb-4">Fuel & Recovery</h3>
-                <p className="text-zinc-600 dark:text-zinc-300 text-sm sm:text-base font-medium mb-6 sm:mb-8 leading-relaxed">
-                  Hunting down the best local pastries near the dorm to replenish the calories burned bouldering.
-                </p>
-                <div className="flex flex-wrap gap-2 sm:gap-3">
-                  {['Pastry Hunting', 'Local Bakeries', 'Coffee'].map((fuel) => (
-                    <span key={fuel} className="px-2.5 py-1 sm:px-3 sm:py-1.5 text-xs font-bold uppercase tracking-wider bg-white dark:bg-zinc-950 text-indigo-700 dark:text-indigo-300 border border-zinc-300 dark:border-zinc-800 sm:border-2 shadow-sm dark:shadow-none">
-                      {fuel}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
+              ))}
             </div>
           </section>
 

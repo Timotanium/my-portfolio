@@ -290,15 +290,20 @@ export default function Carousel({
   const startRef = useRef(active);
   const reportedRef = useRef(active);
   const previousRef = useRef(active);
+  // Track the last activeIndex value we received from the parent so we only
+  // call goTo() when it genuinely changes from outside (e.g. lightbox navigation),
+  // not as a re-echo of the internal engine's own announce() → onChange → parent
+  // state update loop that caused the flicker between slides 0 and 1.
+  const lastExternalIndexRef = useRef(typeof activeIndex === 'number' ? activeIndex : initialIndex);
 
   useEffect(() => {
-    const target = typeof activeIndex === 'number' ? activeIndex : initialIndex;
-    if (typeof target === 'number' && target >= 0 && target < count) {
-      if (target !== active) {
-        engineRef.current?.goTo(target);
-      }
-    }
-  }, [activeIndex, initialIndex, count, active]);
+    const incoming = typeof activeIndex === 'number' ? activeIndex : initialIndex;
+    if (typeof incoming !== 'number' || incoming < 0 || incoming >= count) return;
+    // Only drive the engine when the parent sends a NEW index we haven't seen yet.
+    if (incoming === lastExternalIndexRef.current) return;
+    lastExternalIndexRef.current = incoming;
+    engineRef.current?.goTo(incoming);
+  }, [activeIndex, initialIndex, count]);
 
   const side = stacked || (round && frame) ? 0 : clamp(peek, 0, width * 0.2);
   const slot = Math.max(40, width - side * 2);
