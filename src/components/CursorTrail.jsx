@@ -64,15 +64,12 @@ export default function CursorTrail() {
       });
     };
 
-    const handleMouseMove = (e) => {
-      const currentX = e.clientX;
-      const currentY = e.clientY;
+    const handleMove = (clientX, clientY) => {
+      const lastX = lastMouseRef.current.x ?? clientX;
+      const lastY = lastMouseRef.current.y ?? clientY;
 
-      const lastX = lastMouseRef.current.x ?? currentX;
-      const lastY = lastMouseRef.current.y ?? currentY;
-
-      const dx = currentX - lastX;
-      const dy = currentY - lastY;
+      const dx = clientX - lastX;
+      const dy = clientY - lastY;
       const dist = Math.hypot(dx, dy);
 
       // Thinned-out spawn rate for a lighter, more delicate trail
@@ -95,15 +92,41 @@ export default function CursorTrail() {
         particlesRef.current.splice(0, particlesRef.current.length - 95);
       }
 
-      lastMouseRef.current = { x: currentX, y: currentY };
+      lastMouseRef.current = { x: clientX, y: clientY };
+    };
+
+    const handleMouseMove = (e) => {
+      handleMove(e.clientX, e.clientY);
     };
 
     const handleMouseLeave = () => {
       lastMouseRef.current = { x: null, y: null };
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
+    const handleTouchStart = (e) => {
+      if (e.touches && e.touches[0]) {
+        const touch = e.touches[0];
+        lastMouseRef.current = { x: touch.clientX, y: touch.clientY };
+        spawnPixel(touch.clientX, touch.clientY, 0, -0.5);
+      }
+    };
+
+    const handleTouchMove = (e) => {
+      if (e.touches && e.touches[0]) {
+        handleMove(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    };
+
+    const handleTouchEnd = () => {
+      lastMouseRef.current = { x: null, y: null };
+    };
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
     window.addEventListener("mouseleave", handleMouseLeave);
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
+    window.addEventListener("touchend", handleTouchEnd, { passive: true });
+    window.addEventListener("touchcancel", handleTouchEnd, { passive: true });
 
     let animationFrameId;
 
@@ -149,6 +172,10 @@ export default function CursorTrail() {
       window.removeEventListener("resize", resizeCanvas);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseleave", handleMouseLeave);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
+      window.removeEventListener("touchcancel", handleTouchEnd);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);

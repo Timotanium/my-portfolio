@@ -520,11 +520,13 @@ const DotGrid = ({
       return [event.clientX - rect.left, event.clientY - rect.top];
     };
 
-    const onMove = event => {
-      if (!settingsRef.current.mouseInteraction) return;
-      const [x, y] = locate(event);
+    const updatePointer = (clientX, clientY, time) => {
+      const rect = canvas.getBoundingClientRect();
+      view.left = rect.left;
+      view.top = rect.top;
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
       const inside = x >= 0 && y >= 0 && x <= view.width && y <= view.height;
-      const time = event.timeStamp || performance.now();
       if (inside && pointer.inside && pointer.time) {
         const elapsed = Math.max(4, time - pointer.time) / 1000;
         const vx = (x - pointer.x) / elapsed;
@@ -544,6 +546,43 @@ const DotGrid = ({
       }
     };
 
+    const onMove = event => {
+      if (!settingsRef.current.mouseInteraction) return;
+      updatePointer(event.clientX, event.clientY, event.timeStamp || performance.now());
+    };
+
+    const onTouchMove = event => {
+      if (!settingsRef.current.mouseInteraction || !event.touches || !event.touches[0]) return;
+      updatePointer(event.touches[0].clientX, event.touches[0].clientY, event.timeStamp || performance.now());
+    };
+
+    const onTouchStart = event => {
+      if (!event.touches || !event.touches[0]) return;
+      const touch = event.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+      pointer.x = x;
+      pointer.y = y;
+      pointer.vx = 0;
+      pointer.vy = 0;
+      pointer.time = event.timeStamp || performance.now();
+      pointer.inside = true;
+      if (settingsRef.current.clickShock && !reduced) {
+        shocks.push({ x, y, start: performance.now() });
+        if (shocks.length > 6) shocks.shift();
+      }
+      wake();
+    };
+
+    const onTouchEnd = () => {
+      pointer.time = 0;
+      window.setTimeout(() => {
+        pointer.inside = false;
+        wake();
+      }, 350);
+    };
+
     const onLeave = () => {
       pointer.inside = false;
       pointer.time = 0;
@@ -551,6 +590,7 @@ const DotGrid = ({
     };
 
     const onOut = event => {
+      if (event.pointerType === 'touch') return;
       if (!event.relatedTarget) onLeave();
     };
 
@@ -566,6 +606,10 @@ const DotGrid = ({
     window.addEventListener('pointermove', onMove, { passive: true });
     window.addEventListener('pointerdown', onDown, { passive: true });
     window.addEventListener('pointerout', onOut);
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+    window.addEventListener('touchend', onTouchEnd, { passive: true });
+    window.addEventListener('touchcancel', onTouchEnd, { passive: true });
     window.addEventListener('blur', onLeave);
 
     const resizeObserver = new ResizeObserver(() => {
@@ -612,6 +656,10 @@ const DotGrid = ({
       window.removeEventListener('pointermove', onMove);
       window.removeEventListener('pointerdown', onDown);
       window.removeEventListener('pointerout', onOut);
+      window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
+      window.removeEventListener('touchcancel', onTouchEnd);
       window.removeEventListener('blur', onLeave);
       document.removeEventListener('visibilitychange', onVisibility);
       gl.deleteBuffer(cornerBuffer);
